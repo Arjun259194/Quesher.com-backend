@@ -12,8 +12,9 @@ datasource db {
 
 model User {
   id        String     @id @default(auto()) @map("_id") @db.ObjectId
-  title     String
-  userId    String     @db.ObjectId
+  email     String     @unique
+  username  String
+  password  String
   questions Question[]
 }
 

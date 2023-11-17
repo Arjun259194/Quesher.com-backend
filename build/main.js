@@ -22,12 +22,20 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importStar(require("express"));
+const auth_1 = __importDefault(require("./routes/auth"));
 const server = (0, express_1.default)();
+//Config
 const PORT = process.env.PORT || 3000;
+//Middleware
 server.use((0, express_1.json)());
 server.use((0, express_1.urlencoded)({ extended: false }));
+//Router
+server.use("/auth", auth_1.default);
 server.get("/health-check", (req, res) => {
     return res.status(200).json({ message: `Server is running port: ${PORT}` });
 });
