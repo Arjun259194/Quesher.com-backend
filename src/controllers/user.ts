@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import client from "../database";
-import { AwaitTryCatchWrapper } from "./wrapper";
+import { TryCatchWrapper } from "./wrapper";
 
-export const userProfileController = AwaitTryCatchWrapper(
+export const userProfileController = TryCatchWrapper(
   async (_: Request, res: Response) => {
     const userID = res.locals.userID;
     const foundUser = await client.user.findUnique({ where: { id: userID } });

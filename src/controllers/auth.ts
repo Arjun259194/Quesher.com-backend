@@ -2,9 +2,9 @@ import client from "../database";
 import { otpQuery, userLoginRequestBody, userRegisterRequestBody } from "../schemas/auth";
 import { checkPassword, hashPassword } from "../utils/hash";
 import { newToken } from "../utils/jwt";
-import { AwaitReqBodyParser, AwaitReqQueryParser } from "./wrapper";
+import { ReqBodyParseWrapper, ReqQueryParseWrapper } from "./wrapper";
 
-export const registerController = AwaitReqBodyParser(
+export const registerController = ReqBodyParseWrapper(
   userRegisterRequestBody,
   async (req, res) => {
     const { email, password, username } = req.body;
@@ -35,7 +35,7 @@ export const registerController = AwaitReqBodyParser(
   }
 );
 
-export const loginController = AwaitReqBodyParser(
+export const loginController = ReqBodyParseWrapper(
   userLoginRequestBody,
   async (req, res) => {
     const foundUser = await client.user.findUnique({
@@ -67,4 +67,4 @@ export const loginController = AwaitReqBodyParser(
   }
 );
 
-export const OTPController = AwaitReqQueryParser(otpQuery, async (req, res) => {});
+export const OTPController = ReqQueryParseWrapper(otpQuery, async (req, res) => {});
