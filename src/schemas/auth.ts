@@ -11,6 +11,13 @@ export const userLoginRequestBody = z.object({
   password: z.string(),
 });
 
+export const otpQuery = z.object({
+  email: z.string().email(),
+  code: z.number().min(6).max(6).int(),
+});
+
 export type UserLoginRequestBody = z.infer<typeof userLoginRequestBody>;
 
 export type UserRegisterRequestBody = z.infer<typeof userRegisterRequestBody>;
+
+export type OTPQuery = z.infer<typeof otpQuery>;

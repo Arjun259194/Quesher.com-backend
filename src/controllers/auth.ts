@@ -1,8 +1,8 @@
 import client from "../database";
-import { userLoginRequestBody, userRegisterRequestBody } from "../schemas/user";
+import { otpQuery, userLoginRequestBody, userRegisterRequestBody } from "../schemas/auth";
 import { checkPassword, hashPassword } from "../utils/hash";
 import { newToken } from "../utils/jwt";
-import { AwaitReqBodyParser } from "./wrapper";
+import { AwaitReqBodyParser, AwaitReqQueryParser } from "./wrapper";
 
 export const registerController = AwaitReqBodyParser(
   userRegisterRequestBody,
@@ -66,3 +66,5 @@ export const loginController = AwaitReqBodyParser(
     });
   }
 );
+
+export const OTPController = AwaitReqQueryParser(otpQuery, async (req, res) => {});

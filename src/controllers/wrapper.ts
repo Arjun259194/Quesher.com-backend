@@ -16,6 +16,21 @@ export function AwaitReqBodyParser<TReqBody>(
   };
 }
 
+export function AwaitReqQueryParser<TReqQuery>(
+  schema: z.Schema<TReqQuery>,
+  callback: (req: Request<any, any, any, TReqQuery>, res: Response) => void
+) {
+  return async (req: Request<any, any, any, TReqQuery>, res: Response) => {
+    const parsedQuery = schema.safeParse(req.query);
+    if (!parsedQuery.success) return res.status(400).send(parsedQuery.error.message);
+    try {
+      return callback(req, res);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
+  };
+}
+
 export function AwaitTryCatchWrapper(callback: (req: Request, res: Response) => void) {
   return async (req: Request, res: Response) => {
     try {
