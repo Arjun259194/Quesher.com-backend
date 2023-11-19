@@ -1,8 +1,8 @@
 import express from "express";
 import { userProfileController } from "../controllers/user";
 
-const UserRoutes = express.Router();
+const UserRouter = express.Router();
 
-UserRoutes.get("/profile", userProfileController);
+UserRouter.get("/profile", userProfileController);
 
-export default UserRoutes;
+export default UserRouter;

@@ -1,13 +1,22 @@
 import client from "../database";
 import { userLoginRequestBody, userRegisterRequestBody } from "../schemas/user";
 import { checkPassword, hashPassword } from "../utils/hash";
-import newToken from "../utils/jwt";
+import { newToken } from "../utils/jwt";
 import { AwaitReqBodyParser } from "./wrapper";
 
 export const registerController = AwaitReqBodyParser(
   userRegisterRequestBody,
   async (req, res) => {
     const { email, password, username } = req.body;
+
+    const foundUser = await client.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (foundUser) return res.status(400).json({ message: "User already existing" });
+
     const newUser = await client.user.create({
       data: {
         email,
@@ -45,7 +54,7 @@ export const loginController = AwaitReqBodyParser(
     if (!isValidPassword)
       return res.status(401).json({ message: "Wrong password, user not authorized" });
 
-    const token = newToken({ id: foundUser.id, email: foundUser.email });
+    const token = newToken(foundUser.id);
 
     res.cookie("auth", token, {
       httpOnly: true,
