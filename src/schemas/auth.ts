@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const userRegisterRequestBody = z.object({
   username: z.string(),
@@ -13,7 +13,7 @@ export const userLoginRequestBody = z.object({
 
 export const otpQuery = z.object({
   email: z.string().email(),
-  code: z.number().min(6).max(6).int(),
+  code: z.string().min(6).max(6),
 });
 
 export type UserLoginRequestBody = z.infer<typeof userLoginRequestBody>;

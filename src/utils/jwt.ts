@@ -1,4 +1,4 @@
-import * as jwt from "jsonwebtoken";
+import * as jwt from 'jsonwebtoken';
 
 export function newToken(payload: string | object | Buffer) {
   return jwt.sign(payload, process.env.JWT_SECRET);

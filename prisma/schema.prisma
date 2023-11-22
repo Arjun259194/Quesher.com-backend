@@ -16,6 +16,7 @@ model User {
   username  String
   password  String
   questions Question[]
+  Otp       Otp[]
 }
 
 model Question {
@@ -25,8 +26,9 @@ model Question {
   userId   String? @db.ObjectId
 }
 
-model OTP {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  email String @unique
-  code  String
+model Otp {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  User   User   @relation(fields: [userId], references: [id])
+  code   Int
+  userId String @db.ObjectId
 }
