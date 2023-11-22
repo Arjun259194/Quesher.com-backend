@@ -1,4 +1,4 @@
-import os from "os";
+import os from 'os';
 export function genRandOtpCode() {
   const CODE_LEN = 6;
   const code = Math.floor(100000 + Math.random() * 900000);

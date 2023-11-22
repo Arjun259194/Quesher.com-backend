@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { z } from "zod";
+import { Request, Response } from 'express';
+import { z } from 'zod';
 
 /**
  * Wraps an Express route handler with a request body parser using a specified schema.
@@ -10,11 +10,12 @@ import { z } from "zod";
  */
 export function ReqBodyParseWrapper<TReqBody>(
   schema: z.Schema<TReqBody>,
-  callback: (req: Request<any, any, TReqBody, any>, res: Response) => void
+  callback: (req: Request<any, any, TReqBody, any>, res: Response) => void,
 ) {
   return async (req: Request<any, any, TReqBody, any>, res: Response) => {
     const parsedBody = schema.safeParse(req.body);
-    if (!parsedBody.success) return res.status(400).send(parsedBody.error.message);
+    if (!parsedBody.success)
+      return res.status(400).send(parsedBody.error.message);
     try {
       return callback(req, res);
     } catch (error) {
@@ -25,11 +26,12 @@ export function ReqBodyParseWrapper<TReqBody>(
 
 export function ReqQueryParseWrapper<TReqQuery>(
   schema: z.Schema<TReqQuery>,
-  callback: (req: Request<any, any, any, TReqQuery>, res: Response) => void
+  callback: (req: Request<any, any, any, TReqQuery>, res: Response) => void,
 ) {
   return async (req: Request<any, any, any, TReqQuery>, res: Response) => {
     const parsedQuery = schema.safeParse(req.query);
-    if (!parsedQuery.success) return res.status(400).send(parsedQuery.error.message);
+    if (!parsedQuery.success)
+      return res.status(400).send(parsedQuery.error.message);
     try {
       return callback(req, res);
     } catch (error) {
@@ -38,7 +40,9 @@ export function ReqQueryParseWrapper<TReqQuery>(
   };
 }
 
-export function TryCatchWrapper(callback: (req: Request, res: Response) => void) {
+export function TryCatchWrapper(
+  callback: (req: Request, res: Response) => void,
+) {
   return async (req: Request, res: Response) => {
     try {
       return callback(req, res);
