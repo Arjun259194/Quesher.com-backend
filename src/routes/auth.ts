@@ -1,15 +1,21 @@
-import express from 'express';
-import {
-  OTPController,
-  loginController,
-  registerController,
-} from '../controllers/auth';
+import express, { Router, type Express } from 'express';
+import AuthController from '../controllers/auth';
+import Client from '../utils/database';
+import MailService from '../utils/email';
 
-const AuthRouter = express.Router();
+export default class AuthRouter {
+  private router: Router;
+  private controller: AuthController;
+  constructor(client: Client, mail: MailService) {
+    this.router = express.Router();
+    this.controller = new AuthController(client, mail);
+  }
 
-AuthRouter.post('/register', registerController);
-AuthRouter.post('/login', loginController);
-AuthRouter.get('/login/verify/otp', OTPController);
-AuthRouter.post('/logout');
-
-export default AuthRouter;
+  SetRouter(server: Express) {
+    server.use('/auth', this.router);
+    this.router.post('/register', this.controller.REGISTER);
+    this.router.post('/login', this.controller.LOGIN);
+    this.router.get('/login/verify/otp', this.controller.OPT);
+    this.router.post('/logout');
+  }
+}

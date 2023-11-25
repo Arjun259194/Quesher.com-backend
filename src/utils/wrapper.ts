@@ -40,6 +40,22 @@ export function ReqQueryParseWrapper<TReqQuery>(
   };
 }
 
+export function ReqParamParseWrapper<TReqParam>(
+  schema: z.Schema<TReqParam>,
+  callback: (req: Request<TReqParam, any, any, any>, res: Response) => void,
+) {
+  return async (req: Request<TReqParam, any, any, any>, res: Response) => {
+    const parseParam = schema.safeParse(req.params);
+    if (!parseParam.success)
+      return res.status(400).send(parseParam.error.message);
+    try {
+      return callback(req, res);
+    } catch (error) {
+      return res.status(500).send(error);
+    }
+  };
+}
+
 export function TryCatchWrapper(
   callback: (req: Request, res: Response) => void,
 ) {
