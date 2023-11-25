@@ -1,7 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { validToken } from '../utils/jwt';
 
-export default function authCheck(req: Request, res: Response, next: NextFunction) {
+export default function authCheck(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
   const authToken = req.cookies['auth'];
 
   if (!authToken)
