@@ -42,7 +42,7 @@ export default class MailService {
         break;
       case 'Notification':
         // TODO: creating a mail template for notification
-        break;
+        throw new Error('Notification mail template is not yet implemented');
 
       case 'Debug':
         const { formattedTime, isoTime } = this.getCurrentTime();

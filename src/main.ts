@@ -5,7 +5,7 @@ import express, { json, urlencoded } from 'express';
 import os from 'os';
 import z from 'zod';
 import prismaGlobalClient from './database';
-import { envParse } from './env';
+import envParse from './env';
 import RequestLogger from './middleware/log';
 import AuthRouter from './routes/auth';
 import UserRouter from './routes/user';
@@ -25,7 +25,7 @@ envParse();
 //Global Middleware
 server.use(json());
 server.use(urlencoded({ extended: false }));
-server.use(cors());
+server.use(cors()); // middleware for cross-origin-resource-sharing
 server.use(cookieParser());
 
 // services

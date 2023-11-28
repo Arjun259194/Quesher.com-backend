@@ -8,10 +8,12 @@ const envSchema = z.object({
   PORT: z.string().max(4),
 });
 
-export const envParse = () => envSchema.parse(process.env);
+const envParse = () => envSchema.parse(process.env);
 
 declare global {
   namespace NodeJS {
     interface ProcessEnv extends z.infer<typeof envSchema> {}
   }
 }
+
+export default envParse;
