@@ -6,6 +6,7 @@ import MailService from '../utils/email';
 export default class AuthRouter {
   private router: Router;
   private controller: AuthController;
+
   constructor(client: Client, mail: MailService) {
     this.router = express.Router();
     this.controller = new AuthController(client, mail);

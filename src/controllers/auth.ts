@@ -25,7 +25,7 @@ export default class AuthController extends Controller {
   });
 
   private OTPQuery = z.object({
-    email: z.string().email(),
+    // email: z.string().email(),
     code: z.string().min(6).max(6),
   });
 
@@ -94,7 +94,7 @@ export default class AuthController extends Controller {
   });
 
   OPT = ReqQueryParseWrapper(this.OTPQuery, async (req, res) => {
-    const otp = await this.db.findLatestOptByEmail(req.query.email);
+    const otp = await this.db.findLatestOpt(req.query.code);
 
     if (!otp)
       return res.status(HTTP_STATUS_CODE.NOT_FOUND).json({
@@ -106,9 +106,18 @@ export default class AuthController extends Controller {
         message: 'Authentication code not matched',
       });
 
-    const token = newToken(otp.User.id);
+    const user = await this.db.findUserById(otp.userId);
+
+    if (!user)
+      return res
+        .status(HTTP_STATUS_CODE.INTERNAL_SERVER_ERROR)
+        .json({ message: 'Not found in users' });
+
+    const token = newToken(user.id);
 
     res.cookie('auth', token);
+
+    await this.db.findAndRemoveOtp(otp.id);
 
     return res.status(HTTP_STATUS_CODE.OK).json({ message: 'User logged in' });
   });

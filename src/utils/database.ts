@@ -26,11 +26,9 @@ export default class Client {
     password: string,
     bio: string,
   ) {
-    const QUERY = {
+    return await this.client.user.create({
       data: { email, username, bio, password: await hashPassword(password) },
-    } as const;
-
-    return await this.client.user.create(QUERY);
+    });
   }
 
   async updateUser(
@@ -41,9 +39,10 @@ export default class Client {
       bio: string;
     },
   ) {
-    const QUERY = { where: { id: id }, data: updateBody } as const;
-
-    return await this.client.user.update(QUERY);
+    return await this.client.user.update({
+      where: { id: id },
+      data: updateBody,
+    });
   }
 
   async deleteUser(id: string) {
@@ -59,30 +58,28 @@ export default class Client {
   }
 
   async findUserByEmail(email: string) {
-    const QUERY = { where: { email: email } } as const;
-    return await this.client.user.findUnique(QUERY);
+    return await this.client.user.findUnique({ where: { email: email } });
   }
 
   async findUserById(id: string) {
-    const QUERY = { where: { id: id } } as const;
-    return await this.client.user.findUnique(QUERY);
+    return await this.client.user.findUnique({ where: { id: id } });
   }
 
   //OPT OPERATION
   async createNewOPT(userID: string) {
-    const QUERY = {
+    return await this.client.otp.create({
       data: { code: this.genRandOtpCode(), userId: userID },
-    } as const;
-    return await this.client.otp.create(QUERY);
+    });
   }
 
-  async findLatestOptByEmail(email: string) {
-    const QUERY = {
-      where: { User: { email: email } },
-      include: { User: true },
+  async findLatestOpt(code: string) {
+    return await this.client.otp.findFirst({
+      where: { code: Number(code) },
       orderBy: { id: 'desc' },
-    } as const;
+    });
+  }
 
-    return await this.client.otp.findFirst(QUERY);
+  async findAndRemoveOtp(id: string) {
+    return await this.client.otp.delete({ where: { id: id } });
   }
 }
